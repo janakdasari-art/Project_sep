@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_USERNAME = "janakdasari"
+        DOCKER_PASSWORD = "dckr_pat_v6QD_JshfDuCo22vGuo1dlKaSYo"
         DOCKER_IMAGE = "janakdasari/prt-cicd:latest"
     }
 
@@ -23,25 +24,19 @@ pipeline {
             }
         }
 
-       stage('Push Docker Image') {
-    steps {
-        withCredentials([usernamePassword(
-            credentialsId: 'dockerhub',
-            usernameVariable: 'janakdasari',
-            passwordVariable: 'dckr_pat_v6QD_JshfDuCo22vGuo1dlKaSYo'
-        )]) {
-            sh '''
-                echo "$DOCKER_PASSWORD" | docker login \
-                    -u "$DOCKER_USERNAME" \
-                    --password-stdin
+        stage('Push Docker Image') {
+            steps {
+                sh '''
+                    echo "$DOCKER_PASSWORD" | docker login \
+                        -u "$DOCKER_USERNAME" \
+                        --password-stdin
 
-                docker push $DOCKER_IMAGE
+                    docker push $DOCKER_IMAGE
 
-                docker logout
-            '''
+                    docker logout
+                '''
+            }
         }
-    }
-}
 
         stage('CI/CD Completed') {
             steps {
