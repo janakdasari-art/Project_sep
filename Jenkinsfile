@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'ci-agent' }
 
     environment {
         DOCKER_USERNAME = "janakdasari"
@@ -11,7 +11,7 @@ pipeline {
         stage('Pull Code from Git') {
             steps {
                 git branch: 'main',
-                    url: 'YOUR_GITHUB_REPOSITORY_URL'
+                    url: 'https://github.com/janakdasari-art/Project_sep.git'
             }
         }
 
@@ -26,7 +26,6 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 sh '''
-                    echo "Logging in to Docker Hub..."
                     echo "$DOCKER_PASSWORD" | docker login \
                         -u "$DOCKER_USERNAME" \
                         --password-stdin
