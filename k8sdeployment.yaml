@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prt-app
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: prt-app
+
+  template:
+    metadata:
+      labels:
+        app: prt-app
+
+    spec:
+      containers:
+        - name: prt-app
+          image: janakdasari/prt-cicd:latest
+
+          ports:
+            - containerPort: 80
