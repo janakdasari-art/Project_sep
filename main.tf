@@ -1,5 +1,7 @@
 provider "aws" {
-  region = "ap-south-1"
+  region     = "ap-south-1"
+  access_key = "YOUR_AWS_ACCESS_KEY"
+  secret_key = "YOUR_AWS_SECRET_KEY"
 }
 
 data "aws_ami" "ubuntu" {
