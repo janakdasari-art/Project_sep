@@ -2,14 +2,12 @@ pipeline {
     agent { label 'ci-agent' }
 
     environment {
-        DOCKER_USERNAME = "janakdasari"
-        DOCKER_PASSWORD = "dckr_pat_v6QD_JshfDuCo22vGuo1dlKaSYo"
-        DOCKER_IMAGE = "janakdasari/prt-cicd:latest"
+        IMAGE = 'janakdasari/prt-cicd:latest'
     }
 
     stages {
 
-        stage('Pull Code from Git') {
+        stage('Checkout') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/janakdasari-art/Project_sep.git'
@@ -18,30 +16,32 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                    docker build -t $DOCKER_IMAGE .
-                '''
+                sh 'docker build -t $IMAGE .'
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                sh '''
-                    echo "$DOCKER_PASSWORD" | docker login \
-                        -u "$DOCKER_USERNAME" \
-                        --password-stdin
-
-                    docker push $DOCKER_IMAGE
-
-                    docker logout
-                '''
-            }
-        }
-
-        stage('CI/CD Completed') {
-            steps {
-                echo 'PRT - CI/CD Completed Successfully'
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-credentials',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $IMAGE
+                        docker logout
+                    '''
+                }
             }
         }
     }
-}
+
+    post {
+        success {
+            echo 'PRT - CI/CD Completed Successfully'
+        }
+    }
+} 
