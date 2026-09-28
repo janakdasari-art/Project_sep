@@ -1,7 +1,7 @@
 pipeline {
     agent { label 'ci-agent' }
 
-    triggeres {
+    triggers {
 	githubpush()
 	}
 
