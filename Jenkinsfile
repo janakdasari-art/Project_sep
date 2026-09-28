@@ -2,7 +2,7 @@ pipeline {
     agent { label 'ci-agent' }
 
     triggers {
-	githubpush ()
+	githubPush()
 	}
 
     environment {
