@@ -1,6 +1,11 @@
 pipeline {
     agent { label 'ci-agent' }
 
+
+    triggeres {
+	githubpush()
+	}
+
     environment {
         IMAGE = 'janakdasari/prt-cicd:latest'
     }
